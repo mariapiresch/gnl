@@ -11,17 +11,3 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void    ft_copy_line(t_info *info, char *line)
-{
-    int i;
-
-    if (!taken || !line)
-        return;
-    i = 0;
-    while (taken[i]!='\n')
-    {
-        line[i] = taken[i];
-        i++;
-    }
-}

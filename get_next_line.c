@@ -12,36 +12,63 @@
 
 #include "get_next_line.h"
 
-void ft_get_info(t_info *info)
+char    *get_next_line(int fd)
+{
+    static t_info  *info;
+
+    info = (t_info *)malloc(sizeof(t_info));
+    if (!info || fd == NULL)
+		return (NULL);
+    info->end = 0;
+    info->new = 0;
+    while (info->end == 0)
+    {
+        ft_read(fd, info);
+        ft_find(info);
+    }    
+}
+
+void    ft_read(int fd, t_info *info)
+{
+    info->length = read(fd, info->content, 100);
+    if (info->length < 100)
+        info->end = 1;
+}
+
+void    ft_find(t_info *info)
 {
     int i;
 
     i = 0;
-    while (info->taken[i]!='\n' && info->taken[i])
+    while (info->content[i] && info->content[i] != '\n')
         i++;
-    if (info->taken[i] == '\n')
+    if (info->content[i] && info->content[i] == '\n')
         info->new = 1;
-    else
-        info->new = 0;
     info->length += i;
 }
 
-char    *get_next_line(int fd)
+/*
+void    ft_copy_line(t_info *info, char *line)
 {
-    char    *taken;
-    char    *line;
-    int     len_read;
+    int i;
 
-    if (fd == NULL)
-        return (NULL);
-    taken = (char *)malloc(100 * sizeof(char));
-    line = (char *)malloc(100 * sizeof(char));
-    //if (!taken)
-        //y si falla la reserva de memoria que hago????
-    len_read = 100;
-    while (len_read == 100) //si es =100 no he terminado de leer
+    if (!taken || !line)
+        return;
+    i = 0;
+    while (taken[i]!='\n')
     {
-        len_read = read(fd, taken, 100);
+        line[i] = taken[i];
+        i++;
     }
+}*/
 
-}
+
+//TENGO QUE METER LA VARIABLE ESTATICA!!!
+//COMPROBAR LEAKS DE MEMORIA!
+//ARCHIVOS BONUS CON _BONUS.C O _BONUS.H
+//cuando acabe mover todas las funciones de ayuda a get_n_l_utils.c
+
+
+
+
+

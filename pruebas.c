@@ -1,24 +1,56 @@
 #include <stdio.h>      //printf
 #include <fcntl.h>      //open
 #include <unistd.h>     //read and close
- 
-int main(void)
+#include <stdlib.h> 	//malloc
+
+/*int main(void)
 {
     int fd = open("pruebas.txt", O_RDONLY);
     char    str[100];
+    int leido;
     int	i = 0;
-    while (i < 5)
+    while (i < 22)
 	{
-    	read(fd, str, 2);
-    	printf("%s\n", str);
+    	leido = read(fd, str, 2);
+    	printf("%s        chars leidos: %i vuelta: %i\n", str, leido, i);
 		i++;
 	}
     close(fd);
     return (0);
 }
+*/
+
+char	*estatica(void)
+{
+	static char *est;
+
+	est = (char *)malloc(5 * sizeof(char));
+	if (!est)
+		return(NULL);
+	est[0] = 'a';
+	return(est);
+}
+
+void	modifico(char *str)
+{
+	str[0] = 'Z';
+}
+
+int main() 
+{
+	char	*est;
+
+	est = estatica();
+	printf("%s\n", est);
+	modifico(est);
+	printf("%s\n", est);
+	return (0);
+}
+
+
 
 /*
-valor devuelto: - la línea leída
+valor devuelto: - si todo va bien: la línea leída
                 - NULL si algo va mal / si la lectura termina 
 
 

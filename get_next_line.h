@@ -13,19 +13,20 @@
 #ifndef  GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#include <unistd.h>
-#include <stdlib.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 typedef struct s_info
 {
-	char	*taken;
-	int		end; // =1 si he llegado al final, =0 si no he llegado, =-1 en caso de error 
-	int		new; // =1 si tengo una línea completa, =0 no está completa, =2 si es el final
-	int		lenght;
-}			t_info
+	char			*content;
+	struct s_info	*next;
+	int				end; // =1 si he llegado al final del fd, =0 si no, =-1 en caso de error 
+	int				new; // =1 si tengo una línea completa, =0 no está completa, =2 si es el final
+	int				length;
+}			t_info;
 
-char    *get_next_line(int fd);
-void    ft_copy_line(t_info *info, char *line);
-int		ft_length_line(t_info *info);
+void	ft_get_info(t_info *info);
+char	*get_next_line(int fd);
+void	ft_copy_line(t_info *info, char *line);
 
 #endif
