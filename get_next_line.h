@@ -15,18 +15,24 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdbool.h>
+
+char	*get_next_line(int fd);
+void	ft_free_all(char **buffer, int cnt);
+
+#endif
+
+/*
 
 typedef struct s_info
 {
 	char			*content;
 	struct s_info	*next;
-	int				end; // =1 si he llegado al final del fd, =0 si no, =-1 en caso de error 
-	int				new; // =1 si tengo una línea completa, =0 no está completa, =2 si es el final
+	int				error; // =-1 si ha habido algún error, =0 si no
 	int				length;
 }			t_info;
 
 void	ft_get_info(t_info *info);
-char	*get_next_line(int fd);
-void	ft_copy_line(t_info *info, char *line);
+void	ft_copy_line(t_info *info, char *str);
 
-#endif
+*/

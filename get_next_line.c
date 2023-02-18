@@ -12,63 +12,80 @@
 
 #include "get_next_line.h"
 
-char    *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-    static t_info  *info;
+	static char	**buffer;
+	char		*str;
+	bool		error;
+	int			length;
 
-    info = (t_info *)malloc(sizeof(t_info));
-    if (!info || fd == NULL)
+	error = false;
+	buffer = (char **)malloc(100 * sizeof(char *));
+	if (!buffer || fd == NULL)
 		return (NULL);
-    info->end = 0;
-    info->new = 0;
-    while (info->end == 0)
-    {
-        ft_read(fd, info);
-        ft_find(info);
-    }    
+	buffer[0] = (char *)malloc(100 * sizeof(char));
+	if (!buffer[0])
+	{
+		free(buffer);
+		return (NULL);
+	}
+	length = ft_read(fd, buffer);
+	if (length == 0)
+		return (NULL);
+	str = (char *)malloc(length * (sizeof(char)));
+	ft_copy_line(buffer, str);
+	return (str);
 }
 
-void    ft_read(int fd, t_info *info)
+int	ft_read(int fd, char **buffer)
 {
-    info->length = read(fd, info->content, 100);
-    if (info->length < 100)
-        info->end = 1;
+	int		length;
+	int		cnt;
+	int		located;
+
+	length = 0;
+	cnt = 0;
+	located = 0;
+	while(located == 0)
+	{
+		buffer[cnt] = (char *)malloc(101 * sizeof(char));
+		if (!buffer[cnt])
+		{
+			ft_free_all(buffer, cnt - 1);
+			return (0);
+		}
+		length = read(fd, buffer[cnt], 100);
+		buffer[cnt][100] = '\0';
+		if (length < 100)
+			return (length);
+		located = ft_find_nl(buffer[cnt]);
+		if (located == -1)
+			return (0);
+		cnt++;
+	}
+	return (length);
 }
 
-void    ft_find(t_info *info)
+void	ft_free_all(char **buffer, int cnt)
 {
-    int i;
-
-    i = 0;
-    while (info->content[i] && info->content[i] != '\n')
-        i++;
-    if (info->content[i] && info->content[i] == '\n')
-        info->new = 1;
-    info->length += i;
+	while (cnt >= 0)
+	{
+		free(buffer[cnt]);
+		cnt--;
+	}
+	free(buffer);
 }
 
-/*
-void    ft_copy_line(t_info *info, char *line)
+int	ft_find_nl(char *str) // 0 == false , >0 == true , -1 == error
 {
-    int i;
+	int	i;
 
-    if (!taken || !line)
-        return;
-    i = 0;
-    while (taken[i]!='\n')
-    {
-        line[i] = taken[i];
-        i++;
-    }
-}*/
-
-
-//TENGO QUE METER LA VARIABLE ESTATICA!!!
-//COMPROBAR LEAKS DE MEMORIA!
-//ARCHIVOS BONUS CON _BONUS.C O _BONUS.H
-//cuando acabe mover todas las funciones de ayuda a get_n_l_utils.c
-
-
-
-
-
+	i = 0;
+	if (!str)
+		return (-1);
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (str[i] && str[i] == '\n')
+		return (i);
+	return (0);
+}
