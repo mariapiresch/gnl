@@ -11,3 +11,23 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	ft_free_all(char **buffer, int i)
+{
+	while (i >= 0)
+	{
+		free(buffer[i]);
+		i--;
+	}
+	free(buffer);
+}
+
+int	ft_strlen(char *str) //si veo que no la uso para nada más la quito y lo meto en ft_buffer_not_empty
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}

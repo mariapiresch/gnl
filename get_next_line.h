@@ -19,6 +19,10 @@
 
 char	*get_next_line(int fd);
 void	ft_free_all(char **buffer, int cnt);
+int		ft_read(int fd, char **buffer, int cnt, int *index);
+int		ft_find_char(char *str);
+int		ft_buffer_not_empty(int fd, char **buffer, int *index);
+int 	ft_strlen(char *str);
 
 #endif
 
